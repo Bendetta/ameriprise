@@ -3,7 +3,7 @@
 <head>
     <title>Social API Test</title>
 
-    <meta property="og:url"         content="http://www.nytimes.com/2015/02/19/arts/international/when-great-minds-dont-think-alike.html" />
+    <meta property="og:url"         content="http://ameriprise.herokuapp.com/" />
     <meta property="og:type"        content="article" />
     <meta property="og:title"       content="When Great Minds Don’t Think Alike" />
     <meta property="og:description" content="How much does culture influence creative thinking?" />
@@ -16,6 +16,17 @@
 
     <img src="http://placehold.it/250/ffff00/ffffff" alt />
     <img src="http://placehold.it/250/00ffff/ffffff" alt />
+
+    <button id="js-fbShare">Share on facebook</button>
+
+    <script>
+(function () {
+    var fbShare = document.getElementById('js-fbShare');
+    fbShare.addEventListener('click', function () {
+        window.open('http://facebook.com/sharer.php');
+    });
+}());
+    </script>
 
 </body>
 </html>
