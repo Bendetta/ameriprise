@@ -1,31 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:og="http://ogp.me/ns#">
 <head>
-    <title>Social API Test</title>
-
-    <meta property="og:url"         content="http://ameriprise.herokuapp.com/" />
-    <meta property="og:type"        content="article" />
-    <meta property="og:title"       content="When Great Minds Don’t Think Alike" />
-    <meta property="og:description" content="How much does culture influence creative thinking?" />
-    <meta property="og:image"       content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
-    <meta property="og:image"       content="http://placehold.it/400" />
-    <meta property="og:image"       content="http://placehold.it/800" />
+    <title>Ameriprise Test</title>
 </head>
 <body>
 
+    <button id="js-post_test">POST /test</button>
 
-    <img src="http://placehold.it/250/ffff00/ffffff" alt />
-    <img src="http://placehold.it/250/00ffff/ffffff" alt />
-
-    <button id="js-fbShare">Share on facebook</button>
-
+    <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
     <script>
-(function () {
-    var fbShare = document.getElementById('js-fbShare');
-    fbShare.addEventListener('click', function () {
-        window.open('http://facebook.com/sharer.php');
+$(function () {
+    'use strict';
+
+
+    $('#js-post_test').on('click', function () {
+        $.ajax({
+            url: '/test',
+            method: 'post',
+            data: {
+                foo: 'bar'
+            }
+        });
     });
-}());
+});
     </script>
 
 </body>
