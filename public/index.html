@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <button id="js-post_test">POST /test</button>
+    <button id="js-post_test">POST /fish</button>
 
     <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
     <script>
@@ -15,7 +15,7 @@ $(function () {
 
     $('#js-post_test').on('click', function () {
         $.ajax({
-            url: '/test',
+            url: '/fish',
             method: 'post',
             data: {
                 foo: 'bar'

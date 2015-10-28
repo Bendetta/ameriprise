@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 }));
 
 // Routes
-app.post('/test', function (req, res) {
+app.post('/fish', function (req, res) {
     console.log(req.body);
     res.json({
         message: 'pong'
