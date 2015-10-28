@@ -1,5 +1,6 @@
 var express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var Ameriprise = require('./Ameriprise');
 
 
 var PUBLIC_DIR = 'public';
@@ -17,10 +18,16 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 // Routes
 app.post('/fish', function (req, res) {
-    console.log(req.body);
-    res.json({
-        message: 'pong'
-    });
+    var message = req.body.item.message;
+    var messageBody = message.message;
+    var messageBodyParts = messageBody.slice(1).split(' ');
+    if (messageBodyParts.indexOf('!fish') !== -1) {
+        Ameriprise.fish();
+    }
+    if (messageBodyParts.indexOf('!hunt') !== -1) {
+        Ameriprise.hunt();
+    }
+    res.json({ success: true });
 });
 
 app.listen(port);
