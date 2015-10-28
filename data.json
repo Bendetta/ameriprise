@@ -19,5 +19,26 @@
             "maid",
             "phonebook"
         ]
+    },
+    "hunt": {
+        "adjectives": [
+            "flying",
+            "mega",
+            "baby ",
+            "red-chested ",
+            "gorilla",
+            "cat",
+            "bull "
+        ],
+        "nouns": [
+            "mammer-jammer",
+            "bird",
+            "squirrel",
+            "man",
+            "cat",
+            "elephant",
+            "eyeball-monster",
+            "Bernie Sanders"
+        ]
     }
 }

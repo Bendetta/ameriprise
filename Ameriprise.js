@@ -17,7 +17,10 @@ Ameriprise.delay = {
     range: 2000
 };
 
-Ameriprise.probabilityOfSuccess = 0.6;
+Ameriprise.probabilityOfSuccess = {
+    fish: 0.6,
+    hunt: 0.4
+};
 
 
 Ameriprise.post = function (message) {
@@ -48,8 +51,8 @@ Ameriprise.fish = function (author) {
         .then(function () {
             var message;
             var weight;
-            if (Math.random() < Ameriprise.probabilityOfSuccess) {
-                weight = Math.round(30 * Math.sqrt(Math.random() * 1000));
+            if (Math.random() < Ameriprise.probabilityOfSuccess.fish) {
+                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1000, 3) );
                 message = author + ' caught a ' + weight + ' lb. ' + ArrayUtil.random(data.fish.adjectives) + ArrayUtil.random(data.fish.nouns) + '!';
             } else {
                 message = author + ' doesn\'t catch anything. Better luck next time, ' + author + '.';
@@ -60,7 +63,20 @@ Ameriprise.fish = function (author) {
 
 
 Ameriprise.hunt = function (author) {
-    console.log('hunt', author);
+    var message = author + ' hears a rustling in the bushes...';
+    return Ameriprise.post(message)
+        .then(Ameriprise.randomDelay)
+        .then(function () {
+            var message;
+            var weight;
+            if (Math.random() < Ameriprise.probabilityOfSuccess.hunt) {
+                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1500, 3) );
+                message = author + ' caught a ' + weight + ' lb. ' + ArrayUtil.random(data.hunt.adjectives) + ArrayUtil.random(data.hunt.nouns) + '!';
+            } else {
+                message = author + ' must\'ve spooked it. There\'s always next time, ' + author + '.';
+            }
+            return Ameriprise.post(message);
+        });
 };
 
 
