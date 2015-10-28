@@ -21,11 +21,12 @@ app.post('/fish', function (req, res) {
     var message = req.body.item.message;
     var messageBody = message.message;
     var messageBodyParts = messageBody.slice(1).split(' ');
+    var author = message.from.mention_name;
     if (messageBodyParts.indexOf('!fish') !== -1) {
-        Ameriprise.fish();
+        Ameriprise.fish(author);
     }
     if (messageBodyParts.indexOf('!hunt') !== -1) {
-        Ameriprise.hunt();
+        Ameriprise.hunt(author);
     }
     res.json({ success: true });
 });
