@@ -92,7 +92,7 @@ Ameriprise.fish = function (author) {
                     Ameriprise.saveTrophyData();
                     posts.push(Ameriprise.post('@' + author + ' Wow!!! That\'s a new record! Way to go! Type /!trophy to see it!'));
                     if (previousTrophy.item !== null) {
-                        posts.push(Ameriprise.post('@here Wow! That breaks the old record of a ' + previousTrophy.weight + 'lb. ' + previousTrophy.item + '!'));
+                        posts.push(Ameriprise.post('@here Wow! That breaks the old record of a ' + previousTrophy.weight + 'lb. ' + previousTrophy.item + '! ' + author + ' is amazing!'));
                     }
                 }
             } else {
@@ -112,11 +112,27 @@ Ameriprise.hunt = function (author) {
     return Ameriprise.post(message)
         .then(Ameriprise.randomDelay)
         .then(function () {
-            var message;
+            var posts = [];
             var weight;
+            var item;
+            var previousTrophy;
             if (Math.random() < Ameriprise.probabilityOfSuccess.hunt) {
                 weight = Math.round( 0.000001 * Math.pow(Math.random() * 1500, 3) );
-                message = author + ' caught a ' + weight + ' lb. ' + ArrayUtil.random(data.hunt.adjectives) + ArrayUtil.random(data.hunt.nouns) + '!';
+                item = ArrayUtil.random(data.hunt.adjectives) + ArrayUtil.random(data.hunt.nouns);
+                posts.push(Ameriprise.post(author + ' caught a ' + weight + ' lb. ' + item + '!'));
+                if (weight > _trophies.hunt.weight) {
+                    previousTrophy = _trophies.hunt;
+                    _trophies.hunt = {
+                        author: author,
+                        weight: weight,
+                        item: item
+                    };
+                    Ameriprise.saveTrophyData();
+                    posts.push(Ameriprise.post('@' + author + ' Wow!!! That\'s a new record! Way to go! Type /!trophy to see it!'));
+                    if (previousTrophy.item !== null) {
+                        posts.push(Ameriprise.post('@here Brilliant! That breaks the old record of a ' + previousTrophy.weight + 'lb. ' + previousTrophy.item + '! ' + author + ' is the world\'s best!'));
+                    }
+                }
             } else {
                 message = author + ' must\'ve spooked it. There\'s always next time, ' + author + '.';
             }
@@ -126,10 +142,12 @@ Ameriprise.hunt = function (author) {
 
 
 Ameriprise.trophy = function () {
-    // return $.when(
-        // Ameriprise.post($fishman + ' holds the fishing record when they caught a ' + $bigfish$scale $fishtype);
-        // Ameriprise.post($huntman + ' holds the hunting record when they bagged a ' + $bighunt$scale $hunttype);
-    // );
+    var bigfish = _trophies.fish;
+    var bighunt = _trophies.hunt;
+    return Q.all([
+        Ameriprise.post(bigfish.author + ' holds the fishing record when they caught a ' + bigfish.weight + 'lb. ' + bigfish.item),
+        Ameriprise.post(bighunt.author + ' holds the hunting record when they bagged a ' + bighunt.weight + 'lb. ' + bighunt.item)
+    ]);
 };
 
 

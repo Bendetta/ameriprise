@@ -24,8 +24,11 @@ app.post('/fish', function (req, res) {
     var messageBody = message.message;
     var messageBodyParts = messageBody.slice(1).split(' ');
     var author = message.from.mention_name;
+    var response = { success: true };
     if (messageBodyParts.indexOf('!trophy') !== -1) {
         Ameriprise.trophy();
+        res.json(response);
+        return;
     }
     if (messageBodyParts.indexOf('!fish') !== -1) {
         Ameriprise.fish(author);
@@ -33,7 +36,7 @@ app.post('/fish', function (req, res) {
     if (messageBodyParts.indexOf('!hunt') !== -1) {
         Ameriprise.hunt(author);
     }
-    res.json({ success: true });
+    res.json(response);
 });
 
 app.listen(port);
