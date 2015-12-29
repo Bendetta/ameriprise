@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
     extended: true
 }));
 
-Ameriprise.init();
 
 // Routes
 app.post('/fish', function (req, res) {
