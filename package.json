@@ -11,6 +11,8 @@
   "dependencies": {
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
+    "kerberos": "file:kerberos",
+    "mongodb": "^2.1.3",
     "q": "^1.4.1",
     "q-io": "^1.13.1"
   }

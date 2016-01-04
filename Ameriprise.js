@@ -5,6 +5,26 @@ var HTTP = require('q-io/http');
 var ArrayUtil = require('./ArrayUtil');
 var data = require('./data.json');
 var fs = require('fs');
+var orm = require('orm');
+var config = require('./config.js');
+
+orm.connect(config.DB_URI, function (error, db) {
+    if (error) {
+        throw error;
+    }
+    var Trophy = db.define('trophies', {
+        id      : String,
+        author  : String,
+        weight  : Number,
+        item    : String,
+        type    : String
+    });
+    Trophy.all(function (error, results) {
+        results.forEach(function (result) {
+            console.log(result.weight);
+        });
+    });
+});
 
 var Ameriprise = {
 
