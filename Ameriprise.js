@@ -94,6 +94,10 @@ Ameriprise.randomDelay = function () {
     return Q.delay(Ameriprise.delay.base + Ameriprise.delay.range * Math.random());
 };
 
+Ameriprise.getRandomWeight = function (currentTrophyWeight) {
+    // Can only break the current trophy by 10 lbs
+    return 1 + Math.round( Math.random() * (currentTrophyWeight + 10) );
+}
 
 Ameriprise.fish = function (author) {
     if (_previousFisher === author) {
@@ -110,7 +114,7 @@ Ameriprise.fish = function (author) {
             var item;
             var previousTrophy;
             if (Math.random() < Ameriprise.probabilityOfSuccess.fish) {
-                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1000, 3) );
+                weight = Ameriprise.getRandomWeight(trophies.fish.weight);
                 item = ArrayUtil.random(data.fish.adjectives) + ArrayUtil.random(data.fish.nouns);
                 posts.push(Ameriprise.post(author + ' caught a ' + weight + ' lb. ' + item + '!'));
                 if (weight > trophies.fish.weight) {
@@ -149,7 +153,7 @@ Ameriprise.hunt = function (author) {
             var item;
             var previousTrophy;
             if (Math.random() < Ameriprise.probabilityOfSuccess.hunt) {
-                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1500, 3) );
+                weight = Ameriprise.getRandomWeight(trophies.hunt.weight);
                 item = ArrayUtil.random(data.hunt.adjectives) + ArrayUtil.random(data.hunt.nouns);
                 posts.push(Ameriprise.post(author + ' caught a ' + weight + ' lb. ' + item + '!'));
                 if (weight > trophies.hunt.weight) {
