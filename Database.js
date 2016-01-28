@@ -31,7 +31,17 @@ Database.getTrophies = function() {
     .then(function(db) {
         var collection = db.collection(Database.TrophyTable);
         collection.find().toArray(function(err, docs) {
-            deferred.resolve(docs);
+            var trophyData = {};
+            for (var index in docs) {
+                var doc = docs[index];
+                // condensing all the trophies into one object
+                trophyData[doc.type] = { 
+                    weight: doc.weight, 
+                    author: doc.author, 
+                    item: doc.item
+                };
+            }
+            deferred.resolve(trophyData);
             db.close(); 
         });
     });

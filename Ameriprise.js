@@ -32,13 +32,17 @@ var _previousFisher = null;
 
 Ameriprise.getTrophyData = function () {
     var deferred = Q.defer();
-    fs.readFile('trophies.json', { encoding: 'utf8' }, function (error, data) {
-        if (error) {
-            deferred.reject(error);
-            return;
-        }
-        deferred.resolve(JSON.parse(data));
-    });
+    
+    if (Ameriprise.cachedTrophies) {
+        deferred.resolve(Ameriprise.cachedTrophies);
+    } else {
+        database.getTrophies().
+        then(function(data) {
+            Ameriprise.cachedTrophies = data;
+            deferred.resolve(data);
+        })
+    }    
+    
     return deferred.promise;
 };
 
