@@ -5,6 +5,7 @@ var HTTP = require('q-io/http');
 var ArrayUtil = require('./ArrayUtil');
 var data = require('./data.json');
 var fs = require('fs');
+var database = require('./Database');
 
 
 var Ameriprise = {
