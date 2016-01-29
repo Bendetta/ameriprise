@@ -17,7 +17,6 @@ Database.connect = function() {
            deferred.reject(err);
            return;
        }       
-       console.log('connected to database');
        deferred.resolve(db);
     });
     
