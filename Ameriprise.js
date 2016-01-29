@@ -5,26 +5,8 @@ var HTTP = require('q-io/http');
 var ArrayUtil = require('./ArrayUtil');
 var data = require('./data.json');
 var fs = require('fs');
-var orm = require('orm');
-var config = require('./config.js');
+var database = require('./Database');
 
-orm.connect(config.DB_URI, function (error, db) {
-    if (error) {
-        throw error;
-    }
-    var Trophy = db.define('trophies', {
-        id      : String,
-        author  : String,
-        weight  : Number,
-        item    : String,
-        type    : String
-    });
-    Trophy.all(function (error, results) {
-        results.forEach(function (result) {
-            console.log(result.weight);
-        });
-    });
-});
 
 var Ameriprise = {
 
@@ -50,26 +32,30 @@ var _previousFisher = null;
 
 Ameriprise.getTrophyData = function () {
     var deferred = Q.defer();
-    fs.readFile('trophies.json', { encoding: 'utf8' }, function (error, data) {
-        if (error) {
-            deferred.reject(error);
-            return;
-        }
-        deferred.resolve(JSON.parse(data));
-    });
+    
+    if (Ameriprise.cachedTrophies) {
+        deferred.resolve(Ameriprise.cachedTrophies);
+    } else {
+        database.getTrophies().
+        then(function(data) {
+            Ameriprise.cachedTrophies = data;
+            deferred.resolve(data);
+        })
+    }    
+    
     return deferred.promise;
 };
 
 
 Ameriprise.saveTrophyData = function (trophies) {
-    var deferred = Q.defer();
-    fs.writeFile('trophies.json', JSON.stringify(trophies), function (error) {
-        if (error) {
-            deferred.reject(error);
-            return;
-        }
+    var deferred = Q.defer(); 
+        
+    database.saveTrophies(trophies)
+    .then(function(result) {
+        Ameriprise.cachedTrophies = trophies;
         deferred.resolve();
     });
+    
     return deferred.promise;
 };
 
@@ -94,6 +80,10 @@ Ameriprise.randomDelay = function () {
     return Q.delay(Ameriprise.delay.base + Ameriprise.delay.range * Math.random());
 };
 
+Ameriprise.getRandomWeight = function (currentTrophyWeight) {
+    // Can only break the current trophy by 10 lbs
+    return 1 + Math.round( Math.random() * (currentTrophyWeight + 10) );
+}
 
 Ameriprise.fish = function (author) {
     if (_previousFisher === author) {
@@ -110,7 +100,7 @@ Ameriprise.fish = function (author) {
             var item;
             var previousTrophy;
             if (Math.random() < Ameriprise.probabilityOfSuccess.fish) {
-                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1000, 3) );
+                weight = Ameriprise.getRandomWeight(trophies.fish.weight);
                 item = ArrayUtil.random(data.fish.adjectives) + ArrayUtil.random(data.fish.nouns);
                 posts.push(Ameriprise.post(author + ' caught a ' + weight + ' lb. ' + item + '!'));
                 if (weight > trophies.fish.weight) {
@@ -149,7 +139,7 @@ Ameriprise.hunt = function (author) {
             var item;
             var previousTrophy;
             if (Math.random() < Ameriprise.probabilityOfSuccess.hunt) {
-                weight = Math.round( 0.000001 * Math.pow(Math.random() * 1500, 3) );
+                weight = Ameriprise.getRandomWeight(trophies.hunt.weight);
                 item = ArrayUtil.random(data.hunt.adjectives) + ArrayUtil.random(data.hunt.nouns);
                 posts.push(Ameriprise.post(author + ' caught a ' + weight + ' lb. ' + item + '!'));
                 if (weight > trophies.hunt.weight) {
