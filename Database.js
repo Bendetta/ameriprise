@@ -30,13 +30,35 @@ Database.getTrophies = function() {
     Database.connect()
     .then(function(db) {
         var collection = db.collection(Database.TrophyTable);
-        collection.find().limit(1).next(function(err, doc) {            
+        collection.find().limit(1).next(function(err, doc) { 
+            if (err) {
+                deferred.reject(err);
+            }           
             deferred.resolve(doc);
             db.close(); 
         });
     });
     
     return deferred.promise;
+};
+
+Database.saveTrophies = function(trophies) {
+    var deferred = Q.defer();
+  
+    Database.connect()
+    .then(function(db) {
+        var collection = db.collection(Database.TrophyTable);
+        
+        collection.updateOne({_id: trophies._id}, trophies, {}, function(err, result) {
+            if (err) {
+                deferred.reject(err);
+            }
+            deferred.resolve();
+            db.close();
+        });
+    });
+    
+    return deferred.promise;  
 };
 
 module.exports = Database;

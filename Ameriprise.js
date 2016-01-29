@@ -48,14 +48,14 @@ Ameriprise.getTrophyData = function () {
 
 
 Ameriprise.saveTrophyData = function (trophies) {
-    var deferred = Q.defer();
-    fs.writeFile('trophies.json', JSON.stringify(trophies), function (error) {
-        if (error) {
-            deferred.reject(error);
-            return;
-        }
+    var deferred = Q.defer(); 
+        
+    database.saveTrophies(trophies)
+    .then(function(result) {
+        Ameriprise.cachedTrophies = trophies;
         deferred.resolve();
     });
+    
     return deferred.promise;
 };
 
